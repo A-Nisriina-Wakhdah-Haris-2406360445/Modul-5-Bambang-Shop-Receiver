@@ -85,5 +85,7 @@ This is the place for you to write reflections:
 ### Mandatory (Subscriber) Reflections
 
 #### Reflection Subscriber-1
+1.  Penggunaan RwLock<> pada kasus ini diperlukan untuk menjaga thread-safatey terhadap akses data NOTIFICATIONS yang bersifat shared. RwLock memungkinkan banyak thread membaca data secara bersamaan sehingga lebih efisien dibandingkan Mutex. Hal ini dikarenakan, Mutex hanya mengizinkan satu thread mengakses data (baik read atau write) dalam satu waktu sehingga semua operasi, seperti read dan write harus mengantri serta menyebabkan penurunan performa.
+2.  Rust tidak mengizinkan mutasi langsung pada variabel static karena untuk mencegah race condition dan menjaga keamanan thread sehingga tidak ada undifined behavior dan tetap aman jika diakses oleh banyak thread. Oleh karena itu, penggunaan mekanisme seperti lazy-static dan structur data yang thread-safe seperti RwLock atau DashMap diperlukan agar dapat akses terhadap data global tetap aman.
 
 #### Reflection Subscriber-2
