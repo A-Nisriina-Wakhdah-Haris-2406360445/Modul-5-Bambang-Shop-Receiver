@@ -84,8 +84,17 @@ This is the place for you to write reflections:
 
 ### Mandatory (Subscriber) Reflections
 
-#### Reflection Subscriber-1
+<details>
+<Summary><b>Reflection Subscriber-1</b></Summary>
+
 1.  Penggunaan RwLock<> pada kasus ini diperlukan untuk menjaga thread-safatey terhadap akses data NOTIFICATIONS yang bersifat shared. RwLock memungkinkan banyak thread membaca data secara bersamaan sehingga lebih efisien dibandingkan Mutex. Hal ini dikarenakan, Mutex hanya mengizinkan satu thread mengakses data (baik read atau write) dalam satu waktu sehingga semua operasi, seperti read dan write harus mengantri serta menyebabkan penurunan performa.
 2.  Rust tidak mengizinkan mutasi langsung pada variabel static karena untuk mencegah race condition dan menjaga keamanan thread sehingga tidak ada undifined behavior dan tetap aman jika diakses oleh banyak thread. Oleh karena itu, penggunaan mekanisme seperti lazy-static dan structur data yang thread-safe seperti RwLock atau DashMap diperlukan agar dapat akses terhadap data global tetap aman.
+</details>
 
-#### Reflection Subscriber-2
+<details>
+<Summary><b>Reflection Subscriber-2</b></Summary>
+
+1. Ya, saya telah mengeksplorasi bagian lain di luar langkah-langkah tutorial, seperti lib.rs dan main.rs. Hal-hal yang saya pelajari mengenai file lib.rs adalah lib.rs memiliki beberapa fungsi utama, yaitu menyediakan HTTP client global (REQWEST_CLIENT), mengelola konfigurasi aplikasi (APP_CONFIG), mendefinisikan sturktur error standar, dan menyediakan helper function seperti composes_error_response(). Selain itu, penggunaan lazy_static pada lib.rs berfungsi agar REQWEST_CLIENT dan APP_CONFIG hanya diinisialisasi sekali dan dapat digunakan secara efisien di seluruh aplikasi. Saya juga memahami bahwa penggunaan type alias seperti Result bertujuan untuk menyederhanakan penulisan kode dan meningkatkan readability. Sementara itu, file main.rs berisi kode yang menjadi entry point aplikasi Rocket (web server), fungsinya adalah untuk membuat dan menjalankan server, sekaligus mengatur konfigurasi awal, dependency (Client), dan routing (endpoint API).
+2. Setelah menyelesaikan tutorial, saya memahami bahwa Observer pattern memudahkan penambahan Subscriber ke dalam sistem karena komponen Publisher tidak perlu mengetahui secara detail implementasi setiap Subscriber dan Publisher hanya menyimpan daftar Subscriber dalam bentuk url dan nama, lalu mengirimkan notifikasi ke semua Subscriber yang ada ketika terjadi suatu event. Melalui pendekatan ini, penambahan Receiver baru tidak perlu mengubah kode utama Publisher, sehingga sistem menjadi lebih fleksibel dan scalable karena loose coupling antara Publisher dan Subscriber. Namun, jika mencoba menjalankan lebih dari satu instance Main app (Publisher), penambahan ke sistem tidak semudah pada Receiver. Hal ini dikarenakan, setiap Publisher akan memiliki daftar Subscribernya masing-masing sehingga memerlukan mekanisme tambahan untuk sinkronisasi atau koordinasi antar Publisher karena apabila tidak menyediakan mekanisme tambahan, maka bisa terjadi inkosistensi data (ex: Subscriber terdaftar di satu Publisher tetapi tidak di Publisher lainnya). Oleh karena itu, menambahkan lebih dari satu Main app (Publisher) ke dalam sistem tidaklah mudah karena memerlukan mekanisme tambahan agar sistem tetap konsisten dan terkoordinasi.
+3. Ya. Fitur-fitur tersebut sangat berguna karena membantu saya untuk memastikan bahwa setiap endpoint API dapat berjalan sesuai yang diharapkan, membantu dalam mendeteksi error dengan lebih cepat, dan membantu memverifikasi response seperti status code dan isi data yang dikembalikan sehingga memastikan bahwa komunikasi antara client dan server berjalan dengan benar.
+</details>
